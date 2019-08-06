@@ -1,0 +1,9 @@
+http://www.maatwebsite.nl/laravel-excel/docs/import
+http://www.maatwebsite.nl/laravel-excel/docs/export
+
+Refernce URL To take backp :-https://laracasts.com/discuss/channels/laravel/how-to-backup-mysql-database
+             https://gist.github.com/willvincent/bfbbfdd7521ffaf554abeb7fff1ab924
+
+
+Schedule on server
+https://stackoverflow.com/questions/32283517/how-to-run-artisan-command-schedulerun-on-hosting-server-laravel-5-1

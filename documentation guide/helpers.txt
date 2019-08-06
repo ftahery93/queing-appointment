@@ -1,0 +1,27 @@
+How to add helper class which we can use in all controller and view blade
+
+For Example:
+
+Let create Permit class in Permit.php in app/helpers/Permit.php =>keep same name as class name for file.
+after add in config/app.php
+'Permit' => App\Helpers\Permit::class,
+
+then edit in composer.json to work
+"autoload": {
+        "classmap": [
+            "database"
+        ],
+        "psr-4": {
+            "App\\": "app/"
+        },
+   
+     "files": [
+            "app/Helpers/Permit.php"
+        ]
+    },
+
+then run command terminal and run
+composer dump-autoload
+to autoload helper file
+then after use in your controller with define helper path
+use App\Helpers\Permit;

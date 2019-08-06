@@ -1,0 +1,7 @@
+====#####Pending Task====#####
+1:- Backup run accroding to schedule wise
+2:- helper cron file run on admin and vendor panel side where it need
+3:- excel upload after complition need to check properly
+4:- Email template if need then add in admin panel
+5:- Add clear in schedule time.
+6:- Print and excel for reporting need to add in admin/vendor report

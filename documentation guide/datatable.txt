@@ -1,0 +1,8 @@
+https://github.com/yajra/laravel-datatables
+https://datatables.yajrabox.com/
+
+
+To change raw and column reference url
+https://yajrabox.com/docs/laravel-datatables/master/row-options
+https://yajrabox.com/docs/laravel-datatables/master/html-builder-index
+https://yajrabox.com/docs/laravel-datatables/master/html-builder-column

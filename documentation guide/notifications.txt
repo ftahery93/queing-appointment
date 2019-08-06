@@ -1,0 +1,19 @@
+
+
+Using Notification Message 
+
+https://laravel.com/docs/5.3/notifications#formatting-mail-messages---Take a look for laravel notification
+
+
+https://mattstauffer.com/blog/the-new-notification-system-in-laravel-5-3/
+
+
+second reference table https://laravel-news.com/laravel-notifications-easily-send-quick-updates-through-slack-sms-email-and-more 
+
+
+After complete follow below command
+php artisan vendor:publish --tag=laravel-notifications
+
+
+Using Mail Message 
+https://laravel.com/docs/5.3/mail

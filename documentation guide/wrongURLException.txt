@@ -1,0 +1,17 @@
+App/Exceptions/Handler.php-- change render method
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

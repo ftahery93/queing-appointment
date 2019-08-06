@@ -1,0 +1,50 @@
+To Access Multiple Users and Multiple Folder Manage then follow Steps Below
+1:- Change first in Config/auth.php 
+Follow reference stackoverflow :- 
+https://stackoverflow.com/questions/46292391/authenticate-users-from-more-than-two-tables-in-laravel-5
+
+2:- Change in route files follow below url
+http://larabrain.com/tips/arranging-many-routes-in-separate-files
+=>Create new route with new file name then change in app/providers/RouteServiceProvider.php
+
+
+
+For Example To add trainer module
+add middleware with class name then add to kernel.php and assign class then add all web class used in kernel.php at the top and create same new one with your middleware name.
+and guard to middleware class
+and define route and prefix in app/providers/RouteServiceProvider.php
+
+
+
+
+Example Reference : https://imrealashu.in/code/laravel/multi-auth-with-laravel-5-2-2/
+
+
+
+
+Important files need to change for multi auth
+middleware create and add to kernel.php with new auth name
+providers-> RouteServiceProvider.php  changes
+route folder add new route for it
+config/auth.php add changes
+then every time auth login add guard with it => example Auth:guard('trainer')->attempt ---for login attempt and for user info Auth::guard('trainer')->user();
+
+
+
+
+Middleware for multiguards
+https://laracasts.com/discuss/channels/laravel/laravel-55-multi-auth-not-working-the-way-i-want-devmarketer-tutorial?page=1
+
+
+
+
+
+
+
+
+
+
+
+
+
+

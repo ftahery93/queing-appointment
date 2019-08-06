@@ -1,0 +1,9 @@
+How to add middleware
+For Example:
+Let create middleware for role
+php artisan make:middleware CheckRole
+then 
+add following step in kernel.php
+app\Http
+'role' => \App\Http\Middleware\CheckRole::class,
+then modify as you want in checkrole.php in middleware

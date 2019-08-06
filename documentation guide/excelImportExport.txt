@@ -1,0 +1,10 @@
+http://www.maatwebsite.nl/laravel-excel/docs/import
+http://www.maatwebsite.nl/laravel-excel/docs/export
+
+
+
+//Example
+https://laravelcode.com/post/excel-and-csv-import-export-using-maatwebsite-in-laravel-example
+http://itsolutionstuff.com/post/laravel-53-import-export-csv-and-excel-file-into-databaseexample.html
+
+https://stackoverflow.com/questions/11119631/excel-date-conversion-using-php-excel

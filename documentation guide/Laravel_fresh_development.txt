@@ -1,0 +1,100 @@
+/*****Stepup steps*********88/
+1. php artisan serve **************to the project
+
+
+2. php artisan make:migration create_links_table --create=links *******(to create table migrate(database table) files)
+
+
+3. php artisan migrate************* to generate tables in the database
+
+
+4. php artisan migrate:refersh ********* to rollback data
+
+
+5. While creating Model of any controller the function name should be same as table name
+
+e.
+g Flight function will have flights table(https://laravel.com/docs/5.5/eloquent)
+6. every table should have created_at & updated_at columns, if in case not required,in the model function we need to specify public $timestamps = false;
+
+
+
+
+7. https://laravel.com/docs/5.5/queries
+
+laravel.comlaravel.com
+
+Eloquent: Getting Started - Laravel
+ - The PHP Framework For Web Artisans
+
+Laravel 
+- The PHP framework for web artisans.
+
+laravel.comlaravel.
+com
+
+Database: Query Builder - Laravel 
+- The PHP Framework For Web Artisans
+
+Laravel - The PHP framework for web artisans.
+
+
+***----DATaBase Migration Details-----*****
+
+Database Migration Reference :- https://laravel.com/docs/5.5/migrations
+Database Table Type List:- ***https://laravel.com/docs/5.0/schema
+https://laravel.com/docs/5.5/migrations#column-modifiers
+https://laravel.com/docs/5.5/migrations#migration-structure
+https://github.com/laravel/framework/issues/6532  ---*** Update and cascade with foreign key example
+
+Database Seeder how to do
+change in ModelFactory in database/factories/Modelfactory.php
+and change in DatabaseSeeder.php in database/seeds/DatabaseSeeder.php
+ **- Command to seed database--php artisan db:seed
+for specific Table *** php artisan db:seed --class=UsersTableSeeder
+**- command to refresh all database php artisan migrate:refresh --seed
+
+Use refrence URL for database seeder--https://laravel.com/docs/5.5/seeding
+Use refrence URL for database seeder--https://laravel.com/docs/5.5/database-testing#generating-factories
+
+//Command use to migrate table and seeds
+====examples=====
+php artisan make:migration create_users_table
+php artisan migrate
+php artisan migrate:refresh  ** To rollback all database
+
+For Data seed
+php artisan db:seed
+
+
+1:- Before start larvel add composer using cmd
+2:- Add laravel project using cmd 
+3:- Rouing referenceURL ***https://laravel.com/docs/5.3/controllers
+4:- Blade referenceURL ***https://laravel.com/docs/master/blade
+5:- Form Submit referenceURL ***https://laravelcollective.com/docs/5.3/html#generating-urls
+6:- Helper Guide ***https://laravel.com/docs/5.5/helpers
+7: - Validation Help ***https://laravel.com/docs/5.5/validation
+8: -Model Description ***https://laravel.com/docs/5.5/eloquent
+9: -Query builder ***https://laravel.com/docs/5.3/queries
+10:-Blade Template ***https://laravel.com/docs/5.3/blade
+11:- CRUD Reference website ***https://scotch.io/tutorials/simple-laravel-crud-with-resource-controllers  
+12:- Reference ***https://laravel.com/docs/5.3/eloquent
+13:- Datatable steps guide reference url ***https://datatables.yajrabox.com/starter
+14:- Http Request reference URL ***https://laravel.com/docs/5.1/requests#retrieving-input.
+15:- Date format reference URL ***https://scotch.io/tutorials/easier-datetime-in-laravel-and-php-with-carbon
+16:- Relationship Query reference ***https://laravel.com/docs/5.5/eloquent-relationships
+17:- Example with relation fetch(one To one/One To Many/ Many To Many)- *** https://scotch.io/tutorials/a-guide-to-using-eloquent-orm-in-laravel
+                    ===https://laracasts.com/discuss/channels/eloquent/retrieve-child-and-parent-and-vice-versa-eloquent
+
+18:- Select Query ***https://laravel.com/docs/5.5/queries#selects
+19:- Validation Reference URL:- https://laravel.com/docs/5.5/validation#creating-form-requests
+
+20:- To assign Variable globally then add in app/providers/AppServiceProvider
+21:- Validation Rule https://laravel.com/docs/4.2/validation#rule-numeric
+22:- to add middleware admin to every page to restrict user to access page without authenticate and add redirect route to exceptions/handler.php
+23:- Foundation reference URL:- https://laravel.com/api/5.3/index.html
+24:- For Menu to make it  active using reference URL https://github.com/dwightwatson/active
+25:- Imageupload composer https://github.com/matriphe/laravel-imageupload#set-output
+26:- Important https://laravel.com/docs/5.0/eloquent#query-scopes
+27:- CarbonFormat Reference URL:- https://scotch.io/tutorials/easier-datetime-in-laravel-and-php-with-carbon
+28: For Laravel Refernece URL:- https://programmingbiters.com/category/laravel-5/

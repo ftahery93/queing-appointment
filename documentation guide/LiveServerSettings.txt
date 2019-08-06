@@ -1,0 +1,19 @@
+Set permission full to storage folder and inside folder
+
+##without artisan command##
+1:- Copy index from public folder and move to root folder and delete server.php
+2:- move assets folder from public folder to root folder
+3:- Change root path from ../bootstrap.php to /bootstrap.php
+
+
+
+
+
+
+
+
+
+
+
+
+

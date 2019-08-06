@@ -1,0 +1,2 @@
+https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/docs/Options.md
+https://www.jqueryscript.net/time-clock/Clean-Data-Timepicker-with-jQuery-Bootstrap-3.html

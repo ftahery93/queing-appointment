@@ -1,0 +1,4 @@
+https://laracasts.com/discuss/channels/laravel/sql-sumcolumn-where
+
+
+http://laraveldaily.com/select-with-dbraw-make-your-database-work/

@@ -1,0 +1,28 @@
+/*****Stepup steps*********88/
+create project using composer or direct
+composer create-project --prefer-dist laravel/laravel blog
+or laravel new blog
+
+install composerin root folder
+composer install
+it will install all dependecies and vendor folder
+and change database name in .env.example file
+
+
+
+change .env.example to .env and add database name to .env file
+
+then apply php artisan key:generate to generate key in .env file
+after apply php artisan migrate to migrate table to database if any
+
+then apply php artisan serve command
+
+
+
+Debuge Mode
+https://laravel-news.com/laravel-debugbar
+
+
+
+Cheat Sheet
+http://cheats.jesse-obrien.ca/

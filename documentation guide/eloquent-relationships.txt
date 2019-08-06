@@ -1,0 +1,11 @@
+https://laravel.com/docs/5.3/eloquent-relationships
+
+https://laravel.com/docs/5.3/eloquent
+
+
+Pivot table example
+http://developed.be/2013/08/30/laravel-4-pivot-table-example-attach-and-detach/
+
+
+example for relationships
+https://stackoverflow.com/questions/36143589/undefined-property-illuminate-database-eloquent-collection-laravel-5-2
