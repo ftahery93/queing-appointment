@@ -1,7 +1,10 @@
 {
     "name": "laravel/laravel",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "type": "project",
     "require": {
@@ -9,14 +12,16 @@
         "barryvdh/laravel-debugbar": "^2.4",
         "consoletvs/charts": "5.*",
         "intervention/image": "^2.4",
-        "laravel/framework": "5.3.*",
+        "laravel/framework": "^5.8.0",
         "laravelcollective/html": "^5.3.0",
         "maatwebsite/excel": "~2.1.0",
+        "php-parallel-lint/php-console-color": "^0.2.0",
         "spatie/laravel-backup": "^3.0.0",
         "watson/active": "^2.0",
         "yajra/laravel-datatables-oracle": "~6.0"
     },
     "require-dev": {
+        "composer/composer": "^1.10",
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~5.0",

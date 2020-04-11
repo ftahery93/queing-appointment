@@ -23,7 +23,8 @@ CMS Pages
 @section('pageheading')
 CMS Pages
 @endsection
-<form role="form" class="form-horizontal form-groups-bordered" autocomplete="off"   action="{{ url('/admin/cmsPages/'. $CmsPage->id)  }}" method="POST" id="form1" enctype="multipart/form-data">
+<form role="form" class="form-horizontal form-groups-bordered" autocomplete="off"
+    action="{{ url('/admin/cmsPages/'. $CmsPage->id)  }}" method="POST" id="form1" enctype="multipart/form-data">
     <input type="hidden" name="_method" value="patch">
 
     {{ csrf_field() }}
@@ -64,7 +65,8 @@ CMS Pages
                                 <label for="name_en" class="col-sm-3 control-label">Name(EN)</label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="name_en" autocomplete="off" value="{{ $CmsPage->name_en }}" name="name_en">
+                                    <input type="text" class="form-control" id="name_en" autocomplete="off"
+                                        value="{{ $CmsPage->name_en }}" name="name_en">
                                     @if ($errors->has('name_en'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('name_en') }}</strong>
@@ -78,7 +80,8 @@ CMS Pages
                                 <label for="name_ar" class="col-sm-3 control-label">Name(AR)</label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="name_ar" autocomplete="off" value="{{ $CmsPage->name_ar }}" name="name_ar" dir="rtl">
+                                    <input type="text" class="form-control" id="name_ar" autocomplete="off"
+                                        value="{{ $CmsPage->name_ar }}" name="name_ar" dir="rtl">
                                     @if ($errors->has('name_ar'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('name_ar') }}</strong>
@@ -98,9 +101,9 @@ CMS Pages
                                 <label for="status" class="col-sm-3 control-label">Status</label>
 
                                 <div class="col-sm-9">
-                                    <select name="status" class="select2" data-allow-clear="true" id="status" >
-                                        <option value="1" @if($CmsPage->status == 1) selected  @endif> Active</option>
-                                        <option value="0" @if($CmsPage->status == 0) selected  @endif> Deactive</option>
+                                    <select name="status" class="select2" data-allow-clear="true" id="status">
+                                        <option value="1" @if($CmsPage->status == 1) selected @endif> Active</option>
+                                        <option value="0" @if($CmsPage->status == 0) selected @endif> Deactive</option>
                                     </select>
                                 </div>
                             </div>
@@ -114,7 +117,8 @@ CMS Pages
                             <div class="col-sm-12{{ $errors->has('description_en') ? ' has-error' : '' }}">
                                 <label for="description_en" class="col-sm-2 control-label">Description(EN)</label>
                                 <div class="col-sm-10">
-                                    <textarea  class="form-control resize" name="description_en" id="description_en" >{{ $CmsPage->description_en }}</textarea>
+                                    <textarea class="form-control resize" name="description_en"
+                                        id="description_en">{{ $CmsPage->description_en }}</textarea>
                                     @if ($errors->has('description_en'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('description_en') }}</strong>
@@ -127,7 +131,8 @@ CMS Pages
                             <div class="col-sm-12{{ $errors->has('description_ar') ? ' has-error' : '' }}">
                                 <label for="description_ar" class="col-sm-2 control-label">Description(AR)</label>
                                 <div class="col-sm-10">
-                                    <textarea  class="form-control resize" name="description_ar" id="description_ar"  dir="rtl">{{ $CmsPage->description_ar }}</textarea>
+                                    <textarea class="form-control resize" name="description_ar" id="description_ar"
+                                        dir="rtl">{{ $CmsPage->description_ar }}</textarea>
                                     @if ($errors->has('description_ar'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('description_ar') }}</strong>
@@ -160,7 +165,7 @@ CMS Pages
 <script src="{{ asset('assets/js/icheck/icheck.min.js') }}"></script>
 <script src="{{ asset('assets/js/ckeditor/ckeditor.js') }}"></script>
 <script type="text/javascript">
-CKEDITOR.replace('description_en',
+    CKEDITOR.replace('description_en',
         {
             customConfig: 'config.js',
             toolbar: [
@@ -182,7 +187,7 @@ CKEDITOR.replace('description_ar',
                 {name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl']},
             ],
         });
-</script> 
+</script>
 <script type="text/javascript">
     jQuery(document).ready(function ($)
     {
