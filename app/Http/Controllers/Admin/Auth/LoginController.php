@@ -35,7 +35,7 @@ use AuthenticatesUsers;
      *
      * @var string
      */
-    protected $redirectTo = '/admin/dashboard';
+    protected $redirectTo = '/admin/ministryUsers';
 
     /**
      * Create a new controller instance.
@@ -98,7 +98,7 @@ use AuthenticatesUsers;
 
             // attempt to do the login
             if (Auth::attempt($userdata)) {
-                return Redirect::to('/admin/dashboard');
+                return Redirect::to('/admin/ministryUsers');
                 // validation successful!
                 // redirect them to the secure section or whatever
                 // return Redirect::to('secure');

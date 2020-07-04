@@ -4,7 +4,7 @@
 
     @include(('layouts.meta'))
 
-    <title>{{ $appTitle->title }} - Admin/@yield('title')</title>
+    <title>Admin/@yield('title')</title>
 
     @include('layouts.css')
 

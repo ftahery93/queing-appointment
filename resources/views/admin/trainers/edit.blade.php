@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-Trainers
+Ministry Users
 @endsection
 
 @section('css')
@@ -14,14 +14,14 @@ Trainers
 @section('breadcrumb')
 <li>
 
-    <a href="{{ url('admin/trainers') }}">Trainers</a>
+    <a href="{{ url('admin/ministryUsers') }}">Ministry Users</a>
 </li>
 @endsection
 
 @section('pageheading')
-Trainers
+Ministry Users
 @endsection
-<form role="form" class="form-horizontal form-groups-bordered" autocomplete="off"   action="{{ url('/admin/trainers/'. $Trainer->id)  }}" method="POST" id="form1" enctype="multipart/form-data">
+<form role="form" class="form-horizontal form-groups-bordered" autocomplete="off"   action="{{ url('/admin/ministryUsers/'. $Trainer->id)  }}" method="POST" id="form1" enctype="multipart/form-data">
     <input type="hidden" name="_method" value="patch">
 
     {{ csrf_field() }}
@@ -42,7 +42,7 @@ Trainers
                             Save
                             <i class="entypo-check"></i>
                         </button>
-                        <a href="{{ url('admin/trainers') }}" class="margin-top0">
+                        <a href="{{ url('admin/ministryUsers') }}" class="margin-top0">
                             <button type="button" class="btn btn-red btn-icon">
                                 Cancel
                                 <i class="entypo-cancel"></i>
@@ -84,19 +84,6 @@ Trainers
 
                                             </div>
 
-                                            <div class="col-sm-6{{ $errors->has('name_ar') ? ' has-error' : '' }}">
-                                                <label for="name_ar" class="col-sm-4 control-label">Name(AR)</label>
-
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control" id="name_ar" autocomplete="off" value="{{ $Trainer->name_ar }}" name="name_ar">
-                                                    @if ($errors->has('name_ar'))
-                                                    <span class="help-block">
-                                                        <strong>{{ $errors->first('name_ar') }}</strong>
-                                                    </span>
-                                                    @endif
-                                                </div>
-
-                                            </div>
 
 
                                         </div>
@@ -184,8 +171,19 @@ Trainers
                                                 </div>
 
                                             </div>
+                                            <div class="col-sm-6{{ $errors->has('username') ? ' has-error' : '' }}">
+                                                <label for="username" class="col-sm-4 control-label">Username</label>
 
-                                            <div class="col-sm-6{{ $errors->has('commission') ? ' has-error' : '' }}">
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" id="username" autocomplete="off"  value="{{ $Trainer->username }}" name="username">
+                                                    @if ($errors->has('username'))
+                                                    <span class="help-block">
+                                                        <strong>{{ $errors->first('username') }}</strong>
+                                                    </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            {{-- <div class="col-sm-6{{ $errors->has('commission') ? ' has-error' : '' }}">
                                                 <label for="commission" class="col-sm-4 control-label">Admin Commission(%)</label>
 
                                                 <div class="col-sm-8">
@@ -196,53 +194,13 @@ Trainers
                                                     </span>
                                                     @endif
                                                 </div>
-                                            </div>
+                                            </div> --}}
 
                                         </div>
 
                                     </div>
 
-                                    <div class="row">
-                                        <div class="form-group col-sm-12">
-                                            <div class="col-sm-6{{ $errors->has('gender_type') ? ' has-error' : '' }}">
-                                                <label for="gender_type" class="col-sm-4 control-label">Gender</label>
-                                                <div class="col-sm-8">
-                                                    <select name="gender_type" class="select2" data-allow-clear="true"  id="gender">
-                                                        <option value="">--Select Gender--</option>
-                                                        @foreach ($gender_types as $gender_type)
-                                                        <option value="{{ $gender_type->id }}" @if ($Trainer->gender_type==$gender_type->id) selected  @endif >{{ $gender_type->name_en }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    @if ($errors->has('gender_type'))
-                                                    <span class="help-block">
-                                                        <strong>{{ $errors->first('gender_type') }}</strong>
-                                                    </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-6{{ $errors->has('area') ? ' has-error' : '' }}">
-                                                <label for="area" class="col-sm-4 control-label">Area</label>
-                                                <div class="col-sm-8">
-                                                    <select name="area" class="select2" data-allow-clear="true">
-                                                        <option value="">--Select Area--</option>
-                                                        @foreach ($areas as $area)
-                                                        <option value="{{ $area->id }}" @if ($Trainer->area==$area->id) selected  @endif >{{ $area->name_en }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    @if ($errors->has('area'))
-                                                    <span class="help-block">
-                                                        <strong>{{ $errors->first('area') }}</strong>
-                                                    </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
+                                    {{-- <div class="row">
                                         <div class="form-group col-sm-12">
                                             <div class="col-sm-6{{ $errors->has('activities') ? ' has-error' : '' }}">
                                                 <label for="activities" class="col-sm-4 control-label">Activities</label>
@@ -263,9 +221,9 @@ Trainers
 
                                         </div>
 
-                                    </div>
+                                    </div> --}}
 
-                                    <div class="row">
+                                    {{-- <div class="row">
                                         <div class="form-group col-sm-12">
                                             <div class="col-sm-12{{ $errors->has('description_en') ? ' has-error' : '' }}">
                                                 <label for="description_en" class="col-sm-2 control-label">Description(EN)</label>
@@ -281,8 +239,8 @@ Trainers
 
                                         </div>
 
-                                    </div>
-                                    <div class="row">
+                                    </div> --}}
+                                    {{-- <div class="row">
                                         <div class="form-group col-sm-12">
 
                                             <div class="col-sm-12{{ $errors->has('description_ar') ? ' has-error' : '' }}">
@@ -299,23 +257,12 @@ Trainers
 
                                         </div>
 
-                                    </div>
+                                    </div> --}}
 
                                     <div class="row">
                                         <div class="form-group col-sm-12">
 
-                                            <div class="col-sm-6{{ $errors->has('username') ? ' has-error' : '' }}">
-                                                <label for="username" class="col-sm-4 control-label">Username</label>
-
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control" id="username" autocomplete="off"  value="{{ $Trainer->username }}" name="username">
-                                                    @if ($errors->has('username'))
-                                                    <span class="help-block">
-                                                        <strong>{{ $errors->first('username') }}</strong>
-                                                    </span>
-                                                    @endif
-                                                </div>
-                                            </div>
+                                            
                                             <?php /* ?>
                                               <div class="col-sm-6{{ $errors->has('civilid') ? ' has-error' : '' }}">
                                               <label for="civilid" class="col-sm-4 control-label">Civil ID</label>
@@ -334,7 +281,7 @@ Trainers
 
                                     </div>
 
-                                    <div class="row">
+                                    {{-- <div class="row">
                                         <div class="form-group col-sm-12">
 
                                             <div class="col-sm-12" @if($Trainer->profile_image != '' || $Trainer->profile_image!=null) style="display:none;" @endif id="upload_image">
@@ -378,7 +325,7 @@ Trainers
 
                                         </div>
 
-                                    </div>
+                                    </div> --}}
 
                                 </div>
 
@@ -386,7 +333,7 @@ Trainers
 
                         </div>
 
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
 
                             <div class="panel panel-primary" data-collapsed="0">
 
@@ -473,7 +420,7 @@ Trainers
                                 </div>
 
                                 <!-- panel body -->
-                                <div class="panel-body">
+                                <div class="panel-body hide">
                                     <div class="row margin-btm10">
                                         <div class="col-sm-12{{ $errors->has('contract_name') ? ' has-error' : '' }}">
                                             <label for="contract_name" class="col-sm-12 control-label" style="text-align:left;margin-bottom:10px;">Contract Name</label>
@@ -526,7 +473,7 @@ Trainers
 
                             </div>
 
-                        </div>
+                        </div> --}}
                     </div>
 
 
@@ -570,22 +517,22 @@ $(document).ready(function () {
                 noSpace: true
             },
             name: "required",
-            name_ar: "required",
-            description_en: "required",
-            description_ar: "required",
+            //name_ar: "required",
+            // description_en: "required",
+            // description_ar: "required",
             email: "required",
-            acc_name: "required",
-            bank_id: "required",
-            contract_startdate: "required",
-            contract_enddate: "required",
-            acc_num: {
-                required: true,
-                number: true
-            },
-            ibn_num: {
-                required: true,
-                alphanumeric: true
-            },
+            // acc_name: "required",
+            // bank_id: "required",
+            // contract_startdate: "required",
+            // contract_enddate: "required",
+            // acc_num: {
+            //     required: true,
+            //     number: true
+            // },
+            // ibn_num: {
+            //     required: true,
+            //     alphanumeric: true
+            // },
             civilid: {
                 required: true,
                 number: true,
@@ -598,20 +545,20 @@ $(document).ready(function () {
                 //minlength: 8,
                 maxlength: 8
             },
-            activities: "required",
-            commission: {
-                required: true,
-                currency: true
-            },
-            profile_image: {
-                required: function (element) {
-                    if ($('#uploaded_image_removed').val() == 1) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                },
-            }
+            //activities: "required",
+            // commission: {
+            //     required: true,
+            //     currency: true
+            // },
+            // profile_image: {
+            //     required: function (element) {
+            //         if ($('#uploaded_image_removed').val() == 1) {
+            //             return true;
+            //         } else {
+            //             return false;
+            //         }
+            //     },
+            // }
         },
         errorPlacement: function (error, element) {
             switch (element.attr("name")) {

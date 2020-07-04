@@ -9,7 +9,7 @@ use DB;
 use View;
 use Input;
 use Carbon\Carbon;
-use App\Models\Trainer\TrainerPackage;
+use App\Models\Trainer\Service;
 use Yajra\Datatables\Datatables;
 use Yajra\Datatables\Html\Builder;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ use App\Helpers\LogActivity;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\TrainerDetail;
 
-class TrainerPackageController extends Controller {
+class ServiceController extends Controller {
 
     public function __construct() {
         $this->middleware('trainer');
@@ -30,33 +30,40 @@ class TrainerPackageController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request) {
-        $TrainerPackage = TrainerPackage::
-                select('id', 'name_en', 'latitude', 'longitude', 'working_hours', 'status', 'created_at')
-                 ->where('trainer_id', Auth::guard('trainer')->user()->trainer_id)
-                ->get();
+        $Service = Service::
+                select('id', 'name_en', 'isQueue', 'isAppointment')
+                 ->where('trainer_id', Auth::guard('trainer')->user()->trainer_id);
+
+                 if(Auth::guard('trainer')->user()->branch_id!=0)
+                 $Service->where('branch_id', Auth::guard('trainer')->user()->branch_id);
+
+                $Service->get();
 
         //Ajax request
         if (request()->ajax()) {
 
-            return Datatables::of($TrainerPackage)
-                            ->editColumn('created_at', function ($TrainerPackage) {
-                                $newYear = new Carbon($TrainerPackage->created_at);
+            return Datatables::of($Service)
+                            ->editColumn('created_at', function ($Service) {
+                                $newYear = new Carbon($Service->created_at);
                                 return $newYear->format('d/m/Y');
                             })                           
-                            ->editColumn('status', function ($TrainerPackage) {
-                                return $TrainerPackage->status == 1 ? '<div class="label label-success status" sid="' . $TrainerPackage->id . '" value="0"><i class="entypo-check"></i></div>' : '<div class="label label-secondary status"  sid="' . $TrainerPackage->id . '" value="1"><i class="entypo-cancel"></i></div>';
+                            ->editColumn('isQueue', function ($Service) {
+                                return $Service->isQueue == 1 ? '<div class="label label-success queue" sid="' . $Service->id . '" value="0"><i class="entypo-check"></i></div>' : '<div class="label label-secondary queue"  sid="' . $Service->id . '" value="1"><i class="entypo-cancel"></i></div>';
+                            })
+                            ->editColumn('isAppointment', function ($Service) {
+                                return $Service->isAppointment == 1 ? '<div class="label label-success appointment" sid="' . $Service->id . '" value="0"><i class="entypo-check"></i></div>' : '<div class="label label-secondary appointment"  sid="' . $Service->id . '" value="1"><i class="entypo-cancel"></i></div>';
                             })
                             ->editColumn('id', function ($TrainerPackage) {
                                 return '<input tabindex="5" type="checkbox" class="icheck-14 check"   name="ids[]" value="' . $TrainerPackage->id . '">';
                             })
-                            ->editColumn('action', function ($TrainerPackage) {
-                                return '<a href="'.url('trainer/branches') .'/' . $TrainerPackage->id . '/edit" class="btn btn-info tooltip-primary btn-small" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit Records"><i class="entypo-pencil"></i></a> '
-                                .'<a href="'.url('trainer/branches') .'/' . $TrainerPackage->id . '/view" class="btn btn-warning tooltip-warning btn-small" data-toggle="tooltip" data-placement="top" title="" data-original-title="View Records"><i class="entypo-eye"></i></a>';
+                            ->editColumn('action', function ($Service) {
+                                return '<a href="'.url('trainer/services') .'/' . $Service->id . '/edit" class="btn btn-info tooltip-primary btn-small" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit Records"><i class="entypo-pencil"></i></a> '
+                                .'<a href="'.url('trainer/queues') .'/' . $Service->id . '/view" class="btn btn-warning tooltip-warning btn-small" data-toggle="tooltip" data-placement="top" title="" data-original-title="Today Queue Records"><i class="entypo-eye"></i></a>';
                             })
                             ->make();
         }
 
-        return view('trainer.branches.index');
+        return view('trainer.services.index');
     }
 
     /**
@@ -65,7 +72,7 @@ class TrainerPackageController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('trainer.branches.create');
+        return view('trainer.services.create');
     }
 
     /**
@@ -87,17 +94,13 @@ class TrainerPackageController extends Controller {
 	);
         $validator = Validator::make($request->all(), [
                     'name_en' => 'required',
-                    'latitude' => 'required',
-                    'longitude' => 'required',
-                    'working_hours' => 'required',
-                    'address' => 'required',
         ],$messsages);
 
 
         // validation failed
         if ($validator->fails()) {
 
-            return redirect('trainer/branches/create')
+            return redirect('trainer/services/create')
                             ->withErrors($validator)->withInput();
         } else {
             $input = $request->all();
@@ -105,14 +108,14 @@ class TrainerPackageController extends Controller {
           
 
 
-            TrainerPackage::create($input);
+            Service::create($input);
 
             //logActivity
-            LogActivity::addToLog('TrainerPackage - ' . $request->name_en, 'created');
+            LogActivity::addToLog('Service - ' . $request->name_en, 'created');
 
             Session::flash('message', config('global.addedRecords'));
 
-            return redirect('trainer/branches');
+            return redirect('trainer/services');
         }
     }
 
@@ -134,20 +137,20 @@ class TrainerPackageController extends Controller {
      */
     public function edit($id) {
 
-        $TrainerPackage = TrainerPackage::find($id);
+        $Service = Service::find($id);
 
         // show the edit form and pass the nerd
-        return View::make('trainer.branches.edit')
-                        ->with('TrainerPackage', $TrainerPackage);
+        return View::make('trainer.services.edit')
+                        ->with('Service', $Service);
     }
 
     public function view($id) {
 
-        $TrainerPackage = TrainerPackage::find($id);
+        $Service = Service::find($id);
 
         // show the edit form and pass the nerd
-        return View::make('trainer.branches.view')
-                        ->with('TrainerPackage', $TrainerPackage);
+        return View::make('trainer.services.view')
+                        ->with('Service', $Service);
     }
 
     /**
@@ -160,11 +163,17 @@ class TrainerPackageController extends Controller {
     public function update(Request $request, $id) {
         //Ajax request
         if (request()->ajax()) {
-            $TrainerPackage = TrainerPackage::findOrFail($id);
-            $TrainerPackage->update(['status' => $request->status]);
+            $Service = Service::findOrFail($id);
+            if($request->type=='1')
+            $Service->update(['isQueue' => $request->status]);
+
+
+            if($request->type=='2')
+            $Service->update(['isAppointment' => $request->status]);
+
             return response()->json(['response' => config('global.statusUpdated')]);
         }
-        $TrainerPackage = TrainerPackage::findOrFail($id);
+        $Service = Service::findOrFail($id);
         // validate
         Validator::extend('less_than', function($attribute, $value, $parameters) {
             $other = Input::get($parameters[0]);
@@ -177,16 +186,12 @@ class TrainerPackageController extends Controller {
        
         $validator = Validator::make($request->all(), [
             'name_en' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
-            'working_hours' => 'required',
-            'address' => 'required',
         ],$messsages);
         
 
         // validation failed
         if ($validator->fails()) {
-            return redirect('trainer/branches/' . $id . '/edit')
+            return redirect('trainer/services/' . $id . '/edit')
                             ->withErrors($validator)->withInput();
         } else {
 
@@ -195,14 +200,14 @@ class TrainerPackageController extends Controller {
             
            
            
-            $TrainerPackage->fill($input)->save();
+            $Service->fill($input)->save();
 
             //logActivity
-            LogActivity::addToLog('TrainerPackage - ' . $request->name_en, 'updated');
+            LogActivity::addToLog('Service - ' . $request->name_en, 'updated');
 
             Session::flash('message', config('global.updatedRecords'));
 
-            return redirect('trainer/branches');
+            return redirect('trainer/services');
         }
     }
 
@@ -218,26 +223,26 @@ class TrainerPackageController extends Controller {
 
         //logActivity
         //fetch title
-        $TrainerPackage = TrainerPackage::
+        $Service = Service::
                 select('name_en')
                 ->whereIn('id', $all_data['ids'])
                 ->get();
 
-        $name = $TrainerPackage->pluck('name_en');
+        $name = $Service->pluck('name_en');
         $groupname = $name->toJson();
 
-        LogActivity::addToLog('TrainerPackage - ' . $groupname, 'deleted');
+        LogActivity::addToLog('Service - ' . $groupname, 'deleted');
 
         $all_data = array_get($all_data, 'ids');
         foreach ($all_data as $id) {
           
-            TrainerPackage::destroy($id);
+            Service::destroy($id);
         }
 
         // redirect
         Session::flash('message', config('global.deletedRecords'));
 
-        return redirect('trainer/branches');
+        return redirect('trainer/services');
     }
 
 }

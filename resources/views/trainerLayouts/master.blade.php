@@ -4,7 +4,7 @@
 
     @include(('trainerLayouts.meta'))
 
-    <title>Fitflow - Trainer/@yield('title')</title>
+    <title>Queue/@yield('title')</title>
 
     @include('trainerLayouts.css')
 

@@ -65,15 +65,8 @@ class RouteServiceProvider extends ServiceProvider
             'prefix' => 'trainer',
         ], function ($router) {
             require base_path('routes/trainer.php');
-        });
+        });        
         
-        Route::group([
-            'middleware' => 'web',
-            'namespace' => $this->namespace,
-            'prefix' => config('global.fitflowVendor'),
-                ], function ($router) {
-            require base_path('routes/vendor.php');
-        });
     }
 
     /**

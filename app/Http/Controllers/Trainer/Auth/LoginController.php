@@ -35,7 +35,7 @@ use AuthenticatesUsers;
      *
      * @var string
      */
-    protected $redirectTo = '/trainer/dashboard';
+    protected $redirectTo = '/trainer/branches';
     protected $guard = 'trainer';
 
     /**
@@ -99,7 +99,7 @@ use AuthenticatesUsers;
 
             // attempt to do the login
             if (Auth::guard($this->guard)->attempt($userdata)) {
-                return Redirect::to('/trainer/dashboard');
+                return Redirect::to('/trainer/branches');
                 // validation successful!
                 // redirect them to the secure section or whatever
                 // return Redirect::to('secure');

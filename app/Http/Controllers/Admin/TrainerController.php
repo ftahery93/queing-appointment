@@ -49,7 +49,7 @@ class TrainerController extends Controller {
 
 
         $Trainer = Trainer::
-                select('id', 'username', 'contract_name', 'contract_startdate', 'contract_enddate', 'status', 'created_at')
+                select('id', 'username',  'status', 'created_at')
                 ->get();
 
         //Ajax request
@@ -60,15 +60,6 @@ class TrainerController extends Controller {
                                 $newYear = new Carbon($Trainer->created_at);
                                 return $newYear->format('d/m/Y');
                             })
-                            ->editColumn('contract_enddate', function ($Trainer) {
-                                if (!empty($Trainer->contract_startdate) && !empty($Trainer->contract_enddate)) {
-                                    $newYear = new Carbon($Trainer->contract_startdate);
-                                    $eYear = new Carbon($Trainer->contract_enddate);
-                                    return $newYear->format('d/m/Y') . '-' . $eYear->format('d/m/Y');
-                                } else {
-                                    return '';
-                                }
-                            })
                             ->editColumn('status', function ($Trainer) {
                                 return $Trainer->status == 1 ? '<div class="label label-success status" sid="' . $Trainer->id . '" value="0"><i class="entypo-check"></i></div>' : '<div class="label label-secondary status"  sid="' . $Trainer->id . '" value="1"><i class="entypo-cancel"></i></div>';
                             })
@@ -77,11 +68,8 @@ class TrainerController extends Controller {
                             })
                             ->editColumn('action', function ($Trainer) {
                                 if ($this->EditAccess)
-                                    return '<a href="' . url('admin/trainers') . '/' . $Trainer->id . '/edit" class="btn btn-info tooltip-primary btn-small " data-toggle="tooltip" data-placement="top" title="Edit Records" data-original-title="Edit Records"><i class="entypo-pencil"></i></a>'
-                                            . ' <a data-id="' . $Trainer->id . '" class="btn btn-orange tooltip-primary btn-small  sendCredential" data-toggle="tooltip" data-placement="top" title="Send Credentials" data-original-title="Send Credentials"><i class="entypo-mail"></i></a>'
-                                            . ' <a href="' . url('admin') . '/' . $Trainer->id . '/trainertransactions" class="btn btn-gold tooltip-primary btn-small" data-toggle="tooltip" data-placement="top" title="Transactions" data-original-title="Transactions"><i class="entypo-cc-share"></i></a>'
-                                            . ' <a href="' . url('admin') . '/' . $Trainer->id . '/subscribers" class="btn btn-orange tooltip-primary btn-small" data-toggle="tooltip" data-placement="top" title="Subscribers" data-original-title="Subscribers"><i class="entypo-users"></i></a>'
-                                            . ' <a href="' . url('admin') . '/trainers/' . $Trainer->id . '/packages" class="btn btn-success tooltip-primary btn-small" data-toggle="tooltip" data-placement="top" title="Packages" data-original-title="Packages"><i class="entypo-bag"></i></a>';
+                                    return '<a href="' . url('admin/ministryUsers') . '/' . $Trainer->id . '/edit" class="btn btn-info tooltip-primary btn-small " data-toggle="tooltip" data-placement="top" title="Edit Records" data-original-title="Edit Records"><i class="entypo-pencil"></i></a>';
+                                            //. ' <a data-id="' . $Trainer->id . '" class="btn btn-orange tooltip-primary btn-small  sendCredential" data-toggle="tooltip" data-placement="top" title="Send Credentials" data-original-title="Send Credentials"><i class="entypo-mail"></i></a>';
                             })
                             ->make();
         }
@@ -104,37 +92,9 @@ class TrainerController extends Controller {
         if (!$this->CreateAccess)
             return redirect('errors/401');
 
-        //Get all User Role
-        $activities = DB::table('activities')
-                ->select('id', 'name_en')
-                ->where('status', 1)
-                ->get();
-
-        //Get all banks
-        $banks = DB::table('banks')
-                ->select('id', 'name_en')
-                ->where('status', 1)
-                ->get();
-
-        //Get all Gender Types
-        $gender_types = DB::table('gender_types')
-                ->select('id', 'name_en')
-                ->where('status', 1)
-                ->limit(2)
-                ->get();
-
-        //Get all Areas
-        $areas = DB::table('areas')
-                ->select('id', 'name_en')
-                ->where('status', 1)
-                ->get();
 
 
-        return view('admin.trainers.create')
-                        ->with('activities', $activities)
-                        ->with('gender_types', $gender_types)
-                        ->with('areas', $areas)
-                        ->with('banks', $banks);
+        return view('admin.trainers.create');
     }
 
     /**
@@ -146,28 +106,12 @@ class TrainerController extends Controller {
     public function store(Request $request) {
 
         // validate
-        $validator = Validator::make($request->only(['name', 'name_ar', 'profile_image', 'username', 'email', 'password', 'password_confirmation', 'activities', 'commission', 'mobile', 'acc_name',
-                            'acc_num', 'ibn_num', 'bank_id', 'contract_startdate', 'contract_enddate', 'description_en', 'description_ar', 'area', 'gender_type']), [
+        $validator = Validator::make($request->all(), [
                     'name' => 'required',
-                    'name_ar' => 'required',
-                    'description_en' => 'required',
-                    'description_ar' => 'required',
                     'username' => 'required|alpha_dash|unique:trainers',
                     'email' => 'required|email|unique:trainers',
                     'password' => 'required|min:6|confirmed',
-                    'activities' => 'required|array|min:1',
-                    'civilid' => 'numeric|digits:12',
                     'mobile' => 'required|digits:8|unique:trainers',
-                    'acc_name' => 'required',
-                    'area' => 'required',
-                    'gender_type' => 'required',
-                    'acc_num' => 'numeric',
-                    'ibn_num' => 'required|alpha_num',
-                    'bank_id' => 'required',
-                    'commission' => array('required', 'regex:/^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/'),
-                    'contract_startdate' => 'date_format:d/m/Y',
-                    'contract_enddate' => 'date_format:d/m/Y',
-                    'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
 
@@ -176,76 +120,29 @@ class TrainerController extends Controller {
         // validation failed
         if ($validator->fails()) {
 
-            return redirect('admin/trainers/create')
+            return redirect('admin/ministryUsers/create')
                             ->withErrors($validator)->withInput();
         } else {
-            $input = $request->only(['name', 'name_ar', 'username', 'email', 'mobile', 'area', 'gender_type', 'description_en', 'description_ar', 'status', 'commission', 'profile_image', 'acc_name', 'acc_num', 'ibn_num', 'bank_id', 'contract_name', 'contract_startdate', 'contract_enddate']);
+            $input = $request->only(['name', 'username', 'email', 'mobile']);
             $input = $request->except(['password_confirmation']);
             $input['original_password'] = $request->password;
             $input['password'] = bcrypt($request->password);
-            $collection = collect($request->activities);
-            $input['activities'] = $collection->toJson();
 
 
-            //Profile Image 
-            if ($request->hasFile('profile_image')) {
-                $profile_image = $request->file('profile_image');
-                $filename = time() . '.' . $profile_image->getClientOriginalExtension();
-                $destinationPath = public_path('trainers_images/');
-                $destinationPath2 = public_path('trainers_images/640-250/');
-                $profile_image->move($destinationPath, $filename);
-                //Create fix Primary image size 
-                $primary_image_path = public_path('trainers_images/' . $filename);
-                $source_primary_image_path = public_path('trainers_images/' . $filename);
-                $PrimaryMaxWidth = config('global.vendorPrimaryImageW');
-                $PrimaryMaxHeight = config('global.vendorPrimaryImageH');
+            $id = Trainer::create($input)->id;
 
-                //Create fix Secondary image size 
-                $secondary_image_path = public_path('trainers_images/640-250/' . $filename);
-                $source_secondary_image_path = public_path('trainers_images/' . $filename);
-                $SecondaryMaxWidth = config('global.vendorSecondaryImageW');
-                $SecondaryMaxHeight = config('global.vendorSecondaryImageH');
-
-                $reduceSize = false;
-                $cropImage = true;
-                $reduceSizePercentage = 1;
-                $maintainAspectRatio = false;
-                $SecondarymaintainAspectRatio = false;
-                $bgColor = config('global.thumbnailColor');
-                $quality = 100;
-                Common::generateThumbnails($source_primary_image_path, $primary_image_path, $reduceSize, $reduceSizePercentage, $PrimaryMaxWidth, $PrimaryMaxHeight, $maintainAspectRatio, $cropImage, $bgColor);
-                Common::generateThumbnails($source_secondary_image_path, $secondary_image_path, $reduceSize, $reduceSizePercentage, $SecondaryMaxWidth, $SecondaryMaxHeight, $SecondarymaintainAspectRatio, $cropImage, $bgColor);
-
-                $input['profile_image'] = $filename;
-            }
-
-
-            //Change Date Format
-            if (strlen($request->contract_startdate)) {
-                $datetime = new DateTime();
-                $newDate = $datetime->createFromFormat('d/m/Y', $request->contract_startdate);
-                $input['contract_startdate'] = $newDate->format('Y-m-d');
-            } else {
-                $input['contract_startdate'] = null;
-            }
-
-            if (strlen($request->contract_enddate)) {
-                $datetime = new DateTime();
-                $newDate = $datetime->createFromFormat('d/m/Y', $request->contract_enddate);
-                $input['contract_enddate'] = $newDate->format('Y-m-d');
-            } else {
-                $input['contract_enddate'] = null;
-            }
-
-
-            Trainer::create($input);
+            if($id){
+            $Trainer = Trainer::findOrFail($id);
+            $Trainer->update(['trainer_id' => $id]);
+           }           
+         
 
             //logActivity
             LogActivity::addToLog('Trainer - ' . $request->username, 'created');
 
             Session::flash('message', config('global.addedRecords'));
 
-            return redirect('admin/trainers');
+            return redirect('admin/ministryUsers');
         }
     }
 
@@ -272,56 +169,11 @@ class TrainerController extends Controller {
         if (!$this->EditAccess)
             return redirect('errors/401');
 
-        //Get all User Role
-        $activities = DB::table('activities')
-                ->select('id', 'name_en')
-                ->where('status', 1)
-                ->get();
-
-        //Get all banks
-        $banks = DB::table('banks')
-                ->select('id', 'name_en')
-                ->where('status', 1)
-                ->get();
-
-        //Get all Gender Types
-        $gender_types = DB::table('gender_types')
-                ->select('id', 'name_en')
-                ->where('status', 1)
-                ->limit(2)
-                ->get();
-
-        //Get all Areas
-        $areas = DB::table('areas')
-                ->select('id', 'name_en')
-                ->where('status', 1)
-                ->get();
-
-
-        $Trainer = Trainer::find($id);
-        //Get permissions json value
-        $collection = collect(json_decode($Trainer->activities, true));
-
-
-        //Change Date Format
-        if (!is_null($Trainer->contract_startdate)) {
-            $newdate = new Carbon($Trainer->contract_startdate);
-            $Trainer->contract_startdate = $newdate->format('d/m/Y');
-        }
-
-        if (!is_null($Trainer->contract_enddate)) {
-            $enddate = new Carbon($Trainer->contract_enddate);
-            $Trainer->contract_enddate = $enddate->format('d/m/Y');
-        }
+        $Trainer = Trainer::find($id);       
 
         // show the edit form and pass the nerd
         return View::make('admin.trainers.edit')
-                        ->with('Trainer', $Trainer)
-                        ->with('collection', $collection)
-                        ->with('activities', $activities)
-                        ->with('gender_types', $gender_types)
-                        ->with('areas', $areas)
-                        ->with('banks', $banks);
+                        ->with('Trainer', $Trainer);
     }
 
     /**
@@ -332,7 +184,7 @@ class TrainerController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-
+   
         //Check Edit Access Permission
         $this->EditAccess = Permit::AccessPermission('trainers-edit');
         if (!$this->EditAccess)
@@ -346,26 +198,11 @@ class TrainerController extends Controller {
         }
         $Trainer = Trainer::findOrFail($id);
         // validate
-        $validator = Validator::make($request->only(['name', 'name_ar', 'username', 'email', 'activities', 'commission', 'mobile', 'area', 'gender_type', 'acc_name', 'acc_num', 'ibn_num', 'bank_id',
-                            'contract_startdate', 'contract_enddate', 'description_en', 'description_ar']), [
-                    'name' => 'required',
-                    'name_ar' => 'required',
-                    'description_en' => 'required',
-                    'description_ar' => 'required',
+        $validator = Validator::make($request->only(['name', 'username', 'email', 'mobile']), [
+                    'name' => 'required',                  
                     'username' => 'required|alpha_dash|unique:trainers,username,' . $id,
-                    'email' => 'required|unique:trainers,email,' . $id,
-                    'activities' => 'required|array|min:1',
-                    'civilid' => 'numeric|digits:12',
+                    'email' => 'required|unique:trainers,email,' . $id,                   
                     'mobile' => 'required|digits:8|unique:trainers,mobile,' . $id,
-                    'acc_name' => 'required',
-                    'area' => 'required',
-                    'gender_type' => 'required',
-                    'acc_num' => 'numeric',
-                    'ibn_num' => 'required|alpha_num',
-                    'bank_id' => 'required',
-                    'commission' => array('required', 'regex:/^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/'),
-                    'contract_startdate' => 'date_format:d/m/Y',
-                    'contract_enddate' => 'date_format:d/m/Y',
         ]);
 
         //Password Validate
@@ -377,22 +214,15 @@ class TrainerController extends Controller {
         }
 
 
-        // Image Validate
-        //If Uploaded Image removed
-        if ($request->uploaded_image_removed != 0) {
-            $validator = Validator::make($request->only(['profile_image']), [
-                        'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-            ]);
-        }
+      
 
         // validation failed
         if ($validator->fails()) {
-            return redirect('admin/trainers/' . $id . '/edit')
+            return redirect('admin/ministryUsers/' . $id . '/edit')
                             ->withErrors($validator)->withInput();
         } else {
 
-            $input = $request->only(['name', 'name_ar', 'username', 'email', 'password', 'mobile', 'area', 'gender_type', 'description_en', 'description_ar', 'status', 'commission', 'profile_image', 'acc_name', 'acc_num', 'ibn_num', 'bank_id', 'contract_name',
-                'contract_startdate', 'contract_enddate']);
+            $input = $request->only(['name', 'username', 'email', 'password', 'mobile','status']);
             $input = $request->except(['password_confirmation']);
 
             if ($request->has('password')) {
@@ -401,82 +231,22 @@ class TrainerController extends Controller {
             } else {
                 $input = $request->except(['password']);
             }
-            $collection = collect($request->activities);
-            $input['activities'] = $collection->toJson();
-
-            //Change Date Format
-            if (strlen($request->contract_startdate)) {
-                $datetime = new DateTime();
-                $newDate = $datetime->createFromFormat('d/m/Y', $request->contract_startdate);
-                $input['contract_startdate'] = $newDate->format('Y-m-d');
-            } else {
-                $input['contract_startdate'] = null;
-            }
-
-            if (strlen($request->contract_enddate)) {
-                $datetime = new DateTime();
-                $newDate = $datetime->createFromFormat('d/m/Y', $request->contract_enddate);
-                $input['contract_enddate'] = $newDate->format('Y-m-d');
-            } else {
-                $input['contract_enddate'] = null;
-            }
-
-            //If Uploaded Image removed
-            if ($request->uploaded_image_removed != 0 && !$request->hasFile('profile_image')) {
-                //Remove previous images
-                $destinationPath = public_path('trainers_images/');
-                $destinationPath2 = public_path('trainers_images/640-250/');
-                if (file_exists($destinationPath . $Trainer->profile_image) && $Trainer->profile_image != '') {
-                    @unlink($destinationPath . $Trainer->profile_image);
-                    @unlink($destinationPath2 . $Trainer->profile_image);
-                }
-                $input['profile_image'] = '';
-            } else {
-
-                if ($request->hasFile('profile_image')) {
-                    $profile_image = $request->file('profile_image');
-                    $filename = time() . '.' . $profile_image->getClientOriginalExtension();
-                    $destinationPath = public_path('trainers_images/');
-                    $destinationPath2 = public_path('trainers_images/640-250/');
-                    $profile_image->move($destinationPath, $filename);
-                    //Create fix Primary image size 
-                    $primary_image_path = public_path('trainers_images/' . $filename);
-                    $source_primary_image_path = public_path('trainers_images/' . $filename);
-                    $PrimaryMaxWidth = config('global.vendorPrimaryImageW');
-                    $PrimaryMaxHeight = config('global.vendorPrimaryImageH');
-
-                    //Create fix Secondary image size 
-                    $secondary_image_path = public_path('trainers_images/640-250/' . $filename);
-                    $source_secondary_image_path = public_path('trainers_images/' . $filename);
-                    $SecondaryMaxWidth = config('global.vendorSecondaryImageW');
-                    $SecondaryMaxHeight = config('global.vendorSecondaryImageH');
-
-                    $reduceSize = false;
-                    $cropImage = true;
-                    $reduceSizePercentage = 1;
-                    $maintainAspectRatio = false;
-                    $SecondarymaintainAspectRatio = false;
-                    $bgColor = config('global.thumbnailColor');
-                    $quality = 100;
-                    Common::generateThumbnails($source_primary_image_path, $primary_image_path, $reduceSize, $reduceSizePercentage, $PrimaryMaxWidth, $PrimaryMaxHeight, $maintainAspectRatio, $cropImage, $bgColor);
-                    Common::generateThumbnails($source_secondary_image_path, $secondary_image_path, $reduceSize, $reduceSizePercentage, $SecondaryMaxWidth, $SecondaryMaxHeight, $SecondarymaintainAspectRatio, $cropImage, $bgColor);
-
-                    //Remove previous images
-                    if (file_exists($destinationPath . $Trainer->profile_image) && $Trainer->profile_image != '') {
-                        @unlink($destinationPath . $Trainer->profile_image);
-                        @unlink($destinationPath2 . $Trainer->profile_image);
-                    }
-                    $input['profile_image'] = $filename;
-                }
-            }
+            
+         
 
             $Trainer->fill($input)->save();
+
+          
+            if($id){
+                $Trainer->update(['trainer_id' => $id]);
+               }   
+
             //logActivity
             LogActivity::addToLog('Trainer - ' . $request->username, 'updated');
 
             Session::flash('message', config('global.updatedRecords'));
 
-            return redirect('admin/trainers');
+            return redirect('admin/ministryUsers');
         }
     }
 
@@ -614,7 +384,7 @@ class TrainerController extends Controller {
         }
 
 
-        return redirect('admin/trainers');
+        return redirect('admin/ministryUsers');
     }
 
     /**

@@ -12,8 +12,8 @@ class Trainer extends Model {
     use SoftDeletes,
         Notifiable;
 
-    protected $fillable = [
-        'username', 'name','name_ar', 'email', 'password', 'original_password', 'mobile', 'status', 'activities', 'commission', 'profile_image', 'acc_name', 'acc_num', 'ibn_num', 'bank_id', 'created_at', 'updated_at','contract_name', 'contract_startdate', 'contract_enddate', 'area', 'gender_type','description_en', 'description_ar'];
+        protected $fillable = [
+            'username', 'name', 'email', 'password', 'original_password', 'civilid', 'mobile', 'branch_id', 'status', 'trainer_id'];
     protected $hidden = [
         'password', 'remember_token',
     ];

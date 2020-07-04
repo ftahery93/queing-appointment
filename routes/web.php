@@ -215,13 +215,13 @@ Route::get('printInstructorSubscriptions', 'Admin\VendorReportPrintController@in
 Route::get('excelInstructorSubscriptions', 'Admin\VendorReportExcelController@instructorSubscriptions');
 
 // Personel Trainer routes
-Route::post('trainers/delete', 'Admin\TrainerController@trashMany');
-Route::get('trainers/trashedlist', 'Admin\TrainerController@trashedlist');
-Route::post('trainers/trashed/{id}/delete', 'Admin\TrainerController@destroy');
-Route::post('trainers/trashed/{id}/restore', 'Admin\TrainerController@restore');
-Route::get('trainers/{id}/sendCredential', 'Admin\TrainerController@sendCredential');
-Route::get('trainers/{id}/packages', 'Admin\TrainerController@packages');
-Route::resource('trainers', 'Admin\TrainerController');
+Route::post('ministryUsers/delete', 'Admin\TrainerController@trashMany');
+Route::get('ministryUsers/trashedlist', 'Admin\TrainerController@trashedlist');
+Route::post('ministryUsers/trashed/{id}/delete', 'Admin\TrainerController@destroy');
+Route::post('ministryUsers/trashed/{id}/restore', 'Admin\TrainerController@restore');
+Route::get('ministryUsers/{id}/sendCredential', 'Admin\TrainerController@sendCredential');
+Route::get('ministryUsers/{id}/packages', 'Admin\TrainerController@packages');
+Route::resource('ministryUsers', 'Admin\TrainerController');
 
 // Personel Trainer Subscribers
 Route::get('{trainer_id}/subscribers', 'Admin\SubscriberController@index');

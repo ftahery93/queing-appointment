@@ -1,7 +1,7 @@
-@extends('layouts.master')
+@extends('trainerLayouts.master')
 
 @section('title')
-Ministry Users
+Queue
 @endsection
 
 @section('css')
@@ -9,16 +9,7 @@ Ministry Users
 <link rel="stylesheet" href="{{ asset('assets/js/select2/select2-bootstrap.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/js/select2/select2.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/js/icheck/skins/polaris/polaris.css') }}">
-@if($EditAccess!=1)
-<style>
-    table tr th:last-child, table tr td:last-child{display:none;}
-</style>
-@endif
-@if($DeleteAccess!=1)
-<style>
-    table tr th:first-child, table tr td:first-child{display:none;}
-</style>
-@endif
+
 
 @endsection
 
@@ -29,13 +20,13 @@ Ministry Users
 @endsection
 
 @section('pageheading')
-Ministry Users
+Queue
 @endsection
-<form class="form" role="form" method="POST" action="{{ url('admin/ministryUsers/delete')  }}" >  
+<form class="form" role="form" method="POST" action="{{ url('trainer/queues/delete')  }}" >  
     {{ csrf_field() }} 
     <div class="row">
         <div class="col-md-12">
-            @include('layouts.flash-message')
+            @include('trainerLayouts.flash-message')
 
             <div class="panel panel-dark" data-collapsed="0">
 
@@ -43,29 +34,32 @@ Ministry Users
                 <div class="panel-heading">
 
                     <div class="panel-options">
-                        @if ($CreateAccess==1)
-                        <a href="{{ url('admin/ministryUsers/create')  }}" class="margin-top0">
+                      
+                        <a href="{{ url('trainer/queues/create')  }}" class="margin-top0">
                             <button type="button" class="btn btn-default btn-icon">
                                 Add Record
                                 <i class="entypo-plus padding10"></i>
                             </button>
                         </a>
-                        @endif
-
-                        @if ($DeleteAccess==1)
-                       <button Onclick="return ConfirmDelete();" type="button" class="btn btn-danger btn-icon">
+                        
+                        <button Onclick="return ConfirmDelete();" type="button" class="btn btn-red btn-icon">
                             Delete
-                            <i class="entypo-trash"></i>
+                            <i class="entypo-cancel"></i>
                         </button>
-                        <a href="{{ url('admin/ministryUsers/trashedlist')  }}" class="margin-top0">
-                            <button type="button" class="btn btn-orange btn-icon">
-                                Trash List
-                                <i class="entypo-ccw padding10"></i>
-                            </button>
-                        </a>
-                        @endif
-
+                       
                     </div>
+                </div>
+
+                <div class="row">
+             <div class="col-sm-12">
+                <ul class="nav nav-tabs bordered">
+                    <!-- available classes "bordered", "right-aligned" --> 
+                    @foreach ($services as $service)
+                    <li class="active"> <a href="{{ url("trainer/queues/$service->id/view") }}"> 
+                        <span class="visible-xs"></span> <span class="hidden-xs">{{ $service->name_en }}</span> </a> </li>
+                    @endforeach
+                 </ul>
+             </div>
                 </div>
 
                 <div class="panel-body  table-responsive">
@@ -74,12 +68,10 @@ Ministry Users
                         <thead>
                             <tr>
                                 <th class="text-center" id="td_checkbox"><input tabindex="5" type="checkbox" class="icheck-14"  id="check-all"></th>
-                                <th class="col-sm-2">UserName</th>
-                                {{-- <th class="col-sm-2">Contract Name</th>
-                                 <th class="text-center col-sm-2">Contract Date</th> --}}
-                                <th class="text-center col-sm-1">Status</th>
-                                <th class="text-center col-sm-1">Created On</th>
-                                <th class="text-center col-sm-3">Actions</th>
+                                <th class="col-sm-3">Branch Name</th>
+                                <th class="col-sm-2">Service</th>
+                                <th class="col-sm-1">start time</th>
+                                {{-- <th class="text-center">Actions</th> --}}
                             </tr>
                         </thead>
 
@@ -114,19 +106,21 @@ Ministry Users
                                     },
                                     "ajax": {
                                         "type": "GET",
-                                        "url": '{{ url("admin/ministryUsers") }}',
+                                        @if ($service_id != 0)
+                                            "url":  '{{ url("trainer/queues/$service_id/view") }}',
+                                            @else
+                                            "url": '{{ url("trainer/queues") }}',
+                                            @endif
+                                       
                                         complete: function () {
                                             $('.loading-image').hide();
                                         }
                                     },
                                     columns: [
-                                        {data: 0, name: 'id', orderable: false, searchable: false, class: 'text-center checkbox_padding'},
-                                        {data: 1, name: 'username'},
-                                        //{data: 2, name: 'contract_name'},
-                                       // {data: 4, name: 'contract_enddate', class: 'text-center', orderable: false},
-                                        {data: 2, name: 'status', orderable: false, searchable: false, class: 'text-center'},
-                                        {data: 3, name: 'created_at', class: 'text-center'},
-                                        {data: 4, name: 'action', orderable: false, searchable: false, class: 'text-center'}
+                                        {data: 0, name: 'id', class: 'text-center checkbox_padding',orderable: false, searchable: false},
+                                        {data: 1, name: 'branch_id'},
+                                        {data: 2, name: 'service_id', class: 'text-center'},
+                                        {data: 3, name: 'starttime', class: 'text-center'},                                     
                                     ],
                                     order: [[1, 'desc']],
                                     "fnDrawCallback": function (oSettings) {
@@ -161,24 +155,8 @@ Ministry Users
                                             $.ajax({
                                                 type: "PATCH",
                                                 async: true,
-                                                url: "{{ url('admin/ministryUsers')}}/"+ID,
+                                                url: "{{ url('trainer/queues')}}/"+ID,
                                                 data: {id: ID, status: Value, _token: '{{ csrf_token() }}'},
-                                                success: function (data) {
-                                                    $table4.DataTable().ajax.reload(null, false);
-                                                    toastr.success(data.response, "", opts);
-                                                }
-                                            });
-                                        });
-                                        /*------END----*/
-                                        /*----sendCredential Email---*/
-                                        $('.sendCredential').on('click', function (e) {
-                                            e.preventDefault();
-                                            var ID = $(this).attr('data-id');
-                                            $.ajax({
-                                                type: "GET",
-                                                async: true,
-                                                url: "{{ url('admin/ministryUsers')}}/"+ID + '/sendCredential',
-                                                data: {id: ID},
                                                 success: function (data) {
                                                     $table4.DataTable().ajax.reload(null, false);
                                                     toastr.success(data.response, "", opts);
@@ -242,7 +220,7 @@ Ministry Users
 
 
     });
-     /*---On Delete All Confirmation---*/
+    /*---On Delete All Confirmation---*/
     function ConfirmDelete() {
         var chkId = '';
         $('.check:checked').each(function () {

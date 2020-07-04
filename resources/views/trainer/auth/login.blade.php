@@ -107,7 +107,7 @@ Login
             </form>
 
 
-            <div class="login-bottom-links">
+            <div class="login-bottom-links hide">
 
                 <a href="{{ url('/trainer/password/reset') }}" class="link">Forgot your password?</a>
 

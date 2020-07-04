@@ -50,7 +50,7 @@ class AppServiceProvider extends ServiceProvider {
                 $view->with('userInfo', $userInfo);
                 $view->with('trainer_profile_size', 'Image size should be Width 770px x Height 300px');
                 $view->with('trainer_profile_WH', 'max-width:500px;max-height:340px');
-                $view->with('subscribers_records_count', DB::table('subscribers_package_details')->where('trainer_id', $userInfo->id)->distinct('subscriber_id')->count());
+                //$view->with('subscribers_records_count', DB::table('subscribers_package_details')->where('trainer_id', $userInfo->id)->distinct('subscriber_id')->count());
             } if (Auth::guard('web')->check()) {
                 $userInfo = Auth::user();
                 $view->with('userInfo', $userInfo);

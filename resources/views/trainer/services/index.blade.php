@@ -1,7 +1,7 @@
-@extends('layouts.master')
+@extends('trainerLayouts.master')
 
 @section('title')
-Ministry Users
+Services
 @endsection
 
 @section('css')
@@ -9,16 +9,7 @@ Ministry Users
 <link rel="stylesheet" href="{{ asset('assets/js/select2/select2-bootstrap.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/js/select2/select2.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/js/icheck/skins/polaris/polaris.css') }}">
-@if($EditAccess!=1)
-<style>
-    table tr th:last-child, table tr td:last-child{display:none;}
-</style>
-@endif
-@if($DeleteAccess!=1)
-<style>
-    table tr th:first-child, table tr td:first-child{display:none;}
-</style>
-@endif
+
 
 @endsection
 
@@ -29,13 +20,13 @@ Ministry Users
 @endsection
 
 @section('pageheading')
-Ministry Users
+Services
 @endsection
-<form class="form" role="form" method="POST" action="{{ url('admin/ministryUsers/delete')  }}" >  
+<form class="form" role="form" method="POST" action="{{ url('trainer/services/delete')  }}" >  
     {{ csrf_field() }} 
     <div class="row">
         <div class="col-md-12">
-            @include('layouts.flash-message')
+            @include('trainerLayouts.flash-message')
 
             <div class="panel panel-dark" data-collapsed="0">
 
@@ -43,28 +34,19 @@ Ministry Users
                 <div class="panel-heading">
 
                     <div class="panel-options">
-                        @if ($CreateAccess==1)
-                        <a href="{{ url('admin/ministryUsers/create')  }}" class="margin-top0">
+                      
+                        <a href="{{ url('trainer/services/create')  }}" class="margin-top0">
                             <button type="button" class="btn btn-default btn-icon">
                                 Add Record
                                 <i class="entypo-plus padding10"></i>
                             </button>
                         </a>
-                        @endif
-
-                        @if ($DeleteAccess==1)
-                       <button Onclick="return ConfirmDelete();" type="button" class="btn btn-danger btn-icon">
+                        
+                        <button Onclick="return ConfirmDelete();" type="button" class="btn btn-red btn-icon">
                             Delete
-                            <i class="entypo-trash"></i>
+                            <i class="entypo-cancel"></i>
                         </button>
-                        <a href="{{ url('admin/ministryUsers/trashedlist')  }}" class="margin-top0">
-                            <button type="button" class="btn btn-orange btn-icon">
-                                Trash List
-                                <i class="entypo-ccw padding10"></i>
-                            </button>
-                        </a>
-                        @endif
-
+                       
                     </div>
                 </div>
 
@@ -74,12 +56,11 @@ Ministry Users
                         <thead>
                             <tr>
                                 <th class="text-center" id="td_checkbox"><input tabindex="5" type="checkbox" class="icheck-14"  id="check-all"></th>
-                                <th class="col-sm-2">UserName</th>
-                                {{-- <th class="col-sm-2">Contract Name</th>
-                                 <th class="text-center col-sm-2">Contract Date</th> --}}
-                                <th class="text-center col-sm-1">Status</th>
-                                <th class="text-center col-sm-1">Created On</th>
-                                <th class="text-center col-sm-3">Actions</th>
+                                <th class="col-sm-3">Name</th>
+                                <th class="col-sm-2">Queue</th>
+                                <th class="col-sm-2">Appointment</th>
+                                <th class="text-center col-sm-2">Created On</th>
+                                <th class="text-center">Actions</th>
                             </tr>
                         </thead>
 
@@ -114,19 +95,18 @@ Ministry Users
                                     },
                                     "ajax": {
                                         "type": "GET",
-                                        "url": '{{ url("admin/ministryUsers") }}',
+                                        "url": '{{ url("trainer/services") }}',
                                         complete: function () {
                                             $('.loading-image').hide();
                                         }
                                     },
                                     columns: [
-                                        {data: 0, name: 'id', orderable: false, searchable: false, class: 'text-center checkbox_padding'},
-                                        {data: 1, name: 'username'},
-                                        //{data: 2, name: 'contract_name'},
-                                       // {data: 4, name: 'contract_enddate', class: 'text-center', orderable: false},
-                                        {data: 2, name: 'status', orderable: false, searchable: false, class: 'text-center'},
-                                        {data: 3, name: 'created_at', class: 'text-center'},
-                                        {data: 4, name: 'action', orderable: false, searchable: false, class: 'text-center'}
+                                        {data: 0, name: 'id', class: 'text-center checkbox_padding',orderable: false, searchable: false},
+                                        {data: 1, name: 'name_en'},
+                                        {data: 2, name: 'queue', class: 'text-center'},
+                                        {data: 3, name: 'appointment', class: 'text-center'},
+                                        {data: 4, name: 'created_at', class: 'text-center'},
+                                        {data: 5, name: 'action', orderable: false, searchable: false, class: 'text-center'}
                                     ],
                                     order: [[1, 'desc']],
                                     "fnDrawCallback": function (oSettings) {
@@ -154,31 +134,30 @@ Ministry Users
                                             $('#check-all').iCheck('update');
                                         });
                                         /*----Status Update---*/
-                                        $('.status').on('click', function (e) {
+                                        $('.queue').on('click', function (e) {
                                             e.preventDefault();
                                             var ID = $(this).attr('sid');
                                             var Value = $(this).attr('value');
                                             $.ajax({
                                                 type: "PATCH",
                                                 async: true,
-                                                url: "{{ url('admin/ministryUsers')}}/"+ID,
-                                                data: {id: ID, status: Value, _token: '{{ csrf_token() }}'},
+                                                url: "{{ url('trainer/services')}}/"+ID,
+                                                data: {id: ID,type: '1', status: Value, _token: '{{ csrf_token() }}'},
                                                 success: function (data) {
                                                     $table4.DataTable().ajax.reload(null, false);
                                                     toastr.success(data.response, "", opts);
                                                 }
                                             });
                                         });
-                                        /*------END----*/
-                                        /*----sendCredential Email---*/
-                                        $('.sendCredential').on('click', function (e) {
+                                        $('.appointment').on('click', function (e) {
                                             e.preventDefault();
-                                            var ID = $(this).attr('data-id');
+                                            var ID = $(this).attr('sid');
+                                            var Value = $(this).attr('value');
                                             $.ajax({
-                                                type: "GET",
+                                                type: "PATCH",
                                                 async: true,
-                                                url: "{{ url('admin/ministryUsers')}}/"+ID + '/sendCredential',
-                                                data: {id: ID},
+                                                url: "{{ url('trainer/services')}}/"+ID,
+                                                data: {id: ID,type: '2', status: Value, _token: '{{ csrf_token() }}'},
                                                 success: function (data) {
                                                     $table4.DataTable().ajax.reload(null, false);
                                                     toastr.success(data.response, "", opts);
@@ -242,7 +221,7 @@ Ministry Users
 
 
     });
-     /*---On Delete All Confirmation---*/
+    /*---On Delete All Confirmation---*/
     function ConfirmDelete() {
         var chkId = '';
         $('.check:checked').each(function () {

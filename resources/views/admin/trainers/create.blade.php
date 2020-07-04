@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-Trainers
+Ministry Users
 @endsection
 
 @section('css')
@@ -14,14 +14,14 @@ Trainers
 @section('breadcrumb')
 <li>
 
-    <a href="{{ url('admin/trainers') }}">Trainers</a>
+    <a href="{{ url('admin/ministryUsers') }}">Ministry Users</a>
 </li>
 @endsection
 
 @section('pageheading')
-Trainers
+Ministry Users
 @endsection
-<form role="form" class="form-horizontal form-groups-bordered" autocomplete="off"  method="POST" action="{{ url('/admin/trainers') }}" id="form1" enctype="multipart/form-data">
+<form role="form" class="form-horizontal form-groups-bordered" autocomplete="off"  method="POST" action="{{ url('/admin/ministryUsers') }}" id="form1" enctype="multipart/form-data">
     {{ method_field('POST') }}
     {{ csrf_field() }}
 
@@ -41,7 +41,7 @@ Trainers
                             Save
                             <i class="entypo-check"></i>
                         </button>
-                        <a href="{{ url('admin/trainers') }}" class="margin-top0">
+                        <a href="{{ url('admin/ministryUsers') }}" class="margin-top0">
                             <button type="button" class="btn btn-red btn-icon">
                                 Cancel
                                 <i class="entypo-cancel"></i>
@@ -82,19 +82,19 @@ Trainers
                                                     @endif
                                                 </div>
                                             </div>
-
-                                            <div class="col-sm-6{{ $errors->has('name_ar') ? ' has-error' : '' }}">
-                                                <label for="name_ar" class="col-sm-4 control-label">Name(AR)</label>
+                                            <div class="col-sm-6{{ $errors->has('username') ? ' has-error' : '' }}">
+                                                <label for="username" class="col-sm-4 control-label">Username</label>
 
                                                 <div class="col-sm-8">
-                                                    <input type="text" class="form-control" id="name_ar" autocomplete="off" value="{{ old('name_ar') }}" name="name_ar">
-                                                    @if ($errors->has('name_ar'))
+                                                    <input type="text" class="form-control" id="username" autocomplete="off"  value="{{ old('username') }}" name="username">
+                                                    @if ($errors->has('username'))
                                                     <span class="help-block">
-                                                        <strong>{{ $errors->first('name_ar') }}</strong>
+                                                        <strong>{{ $errors->first('username') }}</strong>
                                                     </span>
                                                     @endif
                                                 </div>
                                             </div>
+                                           
 
                                         </div>
 
@@ -182,117 +182,7 @@ Trainers
                                                 </div>
                                             </div>
 
-                                            <div class="col-sm-6{{ $errors->has('commission') ? ' has-error' : '' }}">
-                                                <label for="commission" class="col-sm-4 control-label">Admin Commission(%)</label>
-
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control number_only" id="commission" autocomplete="off"  value="{{ old('commission') }}" name="commission">
-                                                    @if ($errors->has('commission'))
-                                                    <span class="help-block">
-                                                        <strong>{{ $errors->first('commission') }}</strong>
-                                                    </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="form-group col-sm-12">
-                                            <div class="col-sm-6{{ $errors->has('gender_type') ? ' has-error' : '' }}">
-                                                <label for="gender_type" class="col-sm-4 control-label">Gender</label>
-                                                <div class="col-sm-8">
-                                                    <select name="gender_type" class="select2" data-allow-clear="true"  id="gender">
-                                                        <option value="">--Select Gender--</option>
-                                                        @foreach ($gender_types as $gender_type)
-                                                        <option value="{{ $gender_type->id }}" {{ (collect(old('gender_type'))->contains($gender_type->id)) ? 'selected':'' }} >{{ $gender_type->name_en }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    @if ($errors->has('gender_type'))
-                                                    <span class="help-block">
-                                                        <strong>{{ $errors->first('gender_type') }}</strong>
-                                                    </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-6{{ $errors->has('area') ? ' has-error' : '' }}">
-                                                <label for="area" class="col-sm-4 control-label">Area</label>
-                                                <div class="col-sm-8">
-                                                    <select name="area" class="select2" data-allow-clear="true">
-                                                        <option value="">--Select Area--</option>
-                                                        @foreach ($areas as $area)
-                                                        <option value="{{ $area->id }}" {{ (collect(old('area'))->contains($area->id)) ? 'selected':'' }} >{{ $area->name_en }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    @if ($errors->has('area'))
-                                                    <span class="help-block">
-                                                        <strong>{{ $errors->first('area') }}</strong>
-                                                    </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="form-group col-sm-12">
-                                            <div class="col-sm-6{{ $errors->has('activities') ? ' has-error' : '' }}">
-                                                <label for="activities" class="col-sm-4 control-label">Activities</label>
-                                                <div class="col-sm-8">
-                                                    <select name="activities[]" class="select2" data-allow-clear="true" multiple="multiple" >
-
-                                                        @foreach ($activities as $activity)
-                                                        <option value="{{ $activity->id }}" {{ (collect(old('activities'))->contains($activity->id)) ? 'selected':'' }} >{{ $activity->name_en }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    @if ($errors->has('activities'))
-                                                    <span class="help-block">
-                                                        <strong>{{ $errors->first('activities') }}</strong>
-                                                    </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="form-group col-sm-12">
-                                            <div class="col-sm-12{{ $errors->has('description_en') ? ' has-error' : '' }}">
-                                                <label for="description_en" class="col-sm-2 control-label">Description(EN)</label>
-                                                <div class="col-sm-10">
-                                                    <textarea  class="form-control resize" name="description_en" id="description_en" >{{ old('description_en') }}</textarea>
-                                                    @if ($errors->has('description_en'))
-                                                    <span class="help-block">
-                                                        <strong>{{ $errors->first('description_en') }}</strong>
-                                                    </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="form-group col-sm-12">
-
-                                            <div class="col-sm-12{{ $errors->has('description_ar') ? ' has-error' : '' }}">
-                                                <label for="description_ar" class="col-sm-2 control-label">Description(AR)</label>
-                                                <div class="col-sm-10">
-                                                    <textarea  class="form-control resize" name="description_ar" id="description_ar" dir="rtl" >{{ old('description_ar') }}</textarea>
-                                                    @if ($errors->has('description_ar'))
-                                                    <span class="help-block">
-                                                        <strong>{{ $errors->first('description_ar') }}</strong>
-                                                    </span>
-                                                    @endif
-                                                </div>
-                                            </div>
+                                            
 
                                         </div>
 
@@ -300,217 +190,16 @@ Trainers
 
 
 
-                                    <div class="row">
-                                        <div class="form-group col-sm-12">
 
-                                            <div class="col-sm-6{{ $errors->has('username') ? ' has-error' : '' }}">
-                                                <label for="username" class="col-sm-4 control-label">Username</label>
-
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control" id="username" autocomplete="off"  value="{{ old('username') }}" name="username">
-                                                    @if ($errors->has('username'))
-                                                    <span class="help-block">
-                                                        <strong>{{ $errors->first('username') }}</strong>
-                                                    </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <?php /* ?>
-                                              <div class="col-sm-6{{ $errors->has('civilid') ? ' has-error' : '' }}">
-                                              <label for="civilid" class="col-sm-4 control-label">Civil ID</label>
-
-                                              <div class="col-sm-8">
-                                              <input type="tel" class="form-control" id="civilid" autocomplete="off"  value="{{ old('civilid') }}" name="civilid">
-                                              @if ($errors->has('civilid'))
-                                              <span class="help-block">
-                                              <strong>{{ $errors->first('civilid') }}</strong>
-                                              </span>
-                                              @endif
-                                              </div>
-                                              </div>
-                                              <?php */ ?>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="form-group col-sm-12">
-
-                                            <div class="col-sm-12">
-
-                                                <label for="profile_image" class="col-sm-2 control-label">Profile Image</label>
-
-                                                <div class="col-sm-10">
-                                                    <div class="fileinput fileinput-new" data-provides="fileinput"  id="error_file">
-                                                        <div class="fileinput-new thumbnail" style="{{ $trainer_profile_WH }}" data-trigger="fileinput">
-                                                            <img src="{{ asset('assets/images/album-image-1.jpg') }}" alt="...">
-                                                        </div>
-                                                        <div class="fileinput-preview fileinput-exists thumbnail" style="{{ $trainer_profile_WH }}"></div>
-                                                        <div>
-                                                            <span class="btn btn-white btn-file">
-                                                                <span class="fileinput-new">Select image</span>
-                                                                <span class="fileinput-exists">Change</span>
-                                                                <input type="file" name="profile_image" accept="image/*">
-                                                            </span>
-                                                            <a href="#" class="btn btn-orange fileinput-exists" data-dismiss="fileinput">Remove</a>
-                                                            <p style="margin-top:20px;" ><b> Image Size: {{ $trainer_profile_size }} </b></p>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
+                                   
+                                   
                                 </div>
 
                             </div>
 
                         </div>
 
-                        <div class="col-md-4">
-
-                            <div class="panel panel-primary" data-collapsed="0">
-
-                                <!-- panel head -->
-                                <div class="panel-heading">
-                                    <div class="panel-title">Bank Details</div>
-
-                                </div>
-
-                                <!-- panel body -->
-                                <div class="panel-body">
-                                    <div class="row margin-btm10">
-                                        <div class="col-sm-12{{ $errors->has('bank_id') ? ' has-error' : '' }}">
-                                            <label for="bank_id" class="col-sm-12 control-label" style="text-align:left;margin-bottom:10px;">Bank Name</label>
-                                            <div class="col-sm-12">
-                                                <select name="bank_id" class="select2" data-allow-clear="true"  >
-
-                                                    @foreach ($banks as $bank)
-                                                    <option value="{{ $bank->id }}" {{ (collect(old('bank_id'))->contains($bank->id)) ? 'selected':'' }} >{{ $bank->name_en }}</option>
-                                                    @endforeach
-                                                </select>
-                                                @if ($errors->has('bank_id'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('bank_id') }}</strong>
-                                                </span>
-                                                @endif
-                                            </div>
-                                        </div>                                        
-                                    </div>
-                                    <div class="row margin-btm10">
-                                        <div class="col-sm-12{{ $errors->has('acc_name') ? ' has-error' : '' }}">
-                                            <label for="acc_name" class="col-sm-12 control-label" style="text-align:left;margin-bottom:10px;">Account Name</label>
-
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control" id="acc_name" autocomplete="off" value="{{ old('acc_name') }}" name="acc_name">
-                                                @if ($errors->has('acc_name'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('acc_name') }}</strong>
-                                                </span>
-                                                @endif
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="row margin-btm10">
-                                        <div class="col-sm-12{{ $errors->has('acc_num') ? ' has-error' : '' }}">
-                                            <label for="acc_num" class="col-sm-12 control-label" style="text-align:left;margin-bottom:10px;">Account Number</label>
-
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control" id="acc_num" autocomplete="off" value="{{ old('acc_num') }}" name="acc_num">
-                                                @if ($errors->has('acc_num'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('acc_num') }}</strong>
-                                                </span>
-                                                @endif
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="row margin-btm10">
-                                        <div class="col-sm-12{{ $errors->has('ibn_num') ? ' has-error' : '' }}">
-                                            <label for="ibn_num" class="col-sm-12 control-label" style="text-align:left;margin-bottom:10px;">IBAN</label>
-
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control" id="ibn_num" autocomplete="off" value="{{ old('ibn_num') }}" name="ibn_num">
-                                                @if ($errors->has('ibn_num'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('ibn_num') }}</strong>
-                                                </span>
-                                                @endif
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <!-- panel head -->
-                                <div class="panel-heading">
-                                    <div class="panel-title">Contract Details</div>
-
-                                </div>
-
-                                <!-- panel body -->
-                                <div class="panel-body">
-                                    <div class="row margin-btm10">
-                                        <div class="col-sm-12{{ $errors->has('contract_name') ? ' has-error' : '' }}">
-                                            <label for="contract_name" class="col-sm-12 control-label" style="text-align:left;margin-bottom:10px;">Contract Name</label>
-
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control" id="contract_name" autocomplete="off" value="{{ old('contract_name') }}" name="contract_name">
-                                                @if ($errors->has('contract_name'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('contract_name') }}</strong>
-                                                </span>
-                                                @endif
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="row margin-btm10">
-                                        <div class="col-sm-12{{ $errors->has('contract_startdate') ? ' has-error' : '' }}">
-                                            <label for="contract_startdate" class="col-sm-12 control-label" style="text-align:left;margin-bottom:10px;">Start Date</label>
-
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control datetimepicker" id="contract_startdate" autocomplete="off" value="{{ old('contract_startdate') }}" name="contract_startdate">
-                                                @if ($errors->has('contract_startdate'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('contract_startdate') }}</strong>
-                                                </span>
-                                                @endif
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="row margin-btm10">
-                                        <div class="col-sm-12{{ $errors->has('contract_enddate') ? ' has-error' : '' }}">
-                                            <label for="contract_enddate" class="col-sm-12 control-label" style="text-align:left;margin-bottom:10px;">End Date</label>
-
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control datetimepicker" id="contract_enddate" autocomplete="off" value="{{ old('contract_enddate') }}" name="contract_enddate">
-                                                @if ($errors->has('contract_enddate'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('contract_enddate') }}</strong>
-                                                </span>
-                                                @endif
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
+                    
                     </div>
 
 
@@ -554,28 +243,28 @@ $(document).ready(function () {
                 noSpace: true
             },
             name: "required",
-            name_ar: "required",
-            description_en: "required",
-            description_ar: "required",
+           // name_ar: "required",
+            // description_en: "required",
+            // description_ar: "required",
             email: "required",
-            acc_name: "required",
-            bank_id: "required",
-            contract_startdate: "required",
-            contract_enddate: "required",
-            acc_num: {
-                required: true,
-                number: true
-            },
-            ibn_num: {
-                required: true,
-                alphanumeric: true
-            },
-            civilid: {
-                required: true,
-                number: true,
-                minlength: 12,
-                maxlength: 12
-            },
+            // acc_name: "required",
+            // bank_id: "required",
+            // contract_startdate: "required",
+            // contract_enddate: "required",
+            // acc_num: {
+            //     required: true,
+            //     number: true
+            // },
+            // ibn_num: {
+            //     required: true,
+            //     alphanumeric: true
+            // },
+            // civilid: {
+            //     required: true,
+            //     number: true,
+            //     minlength: 12,
+            //     maxlength: 12
+            // },
             mobile: {
                 required: true,
                 number: true,
@@ -591,12 +280,12 @@ $(document).ready(function () {
                 minlength: 6,
                 equalTo: "#password"
             },
-            activities: "required",
-            commission: {
-                required: true,
-                currency: true
-            },
-            profile_image: "required",
+            // activities: "required",
+            // commission: {
+            //     required: true,
+            //     currency: true
+            // },
+            //profile_image: "required",
         },
         errorPlacement: function (error, element) {
             switch (element.attr("name")) {
